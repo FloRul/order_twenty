@@ -69,86 +69,126 @@ class _GamePageState extends State<GamePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Column(
-            children: [
-              const SizedBox(height: 16),
-              const Text('Number to order:'),
-              Text(
-                _currentNumber.toString(),
-                style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
-          const Expanded(
-            child: Center(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: TogglesGrid(),
-              ),
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 20),
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primaryContainer,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(10),
-                topRight: Radius.circular(10),
-              ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+    return LayoutBuilder(builder: (_, constraints) {
+      return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          title: Text(widget.title),
+        ),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Column(
               children: [
-                ElevatedButton(
-                  onPressed: _setNextNumber,
-                  child: const Text('Next number'),
-                ),
-                const SizedBox(width: 8),
-                IconButton.filled(
-                  icon: const Icon(Icons.refresh),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog.adaptive(
-                        actionsAlignment: MainAxisAlignment.center,
-                        content: const Text(
-                          'The game will reset.\n Continue ?',
-                          textAlign: TextAlign.center,
-                        ),
-                        actions: [
-                          FilledButton.tonal(
-                            child: const Text('Yes'),
-                            onPressed: () {
-                              _resetGame();
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                          FilledButton(
-                            child: const Text('No'),
-                            onPressed: () {
-                              _resetGame();
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
+                const SizedBox(height: 16),
+                const Text('Number to order:'),
+                DraggableNumber(currentNumber: _currentNumber),
               ],
             ),
-          )
-        ],
+            const Expanded(
+              child: Center(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: TogglesGrid(),
+                ),
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primaryContainer,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(10),
+                  topRight: Radius.circular(10),
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  ElevatedButton(
+                    onPressed: _setNextNumber,
+                    child: const Text('Next number'),
+                  ),
+                  const SizedBox(width: 8),
+                  IconButton.filled(
+                    icon: const Icon(Icons.refresh),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog.adaptive(
+                          actionsAlignment: MainAxisAlignment.center,
+                          content: const Text(
+                            'The game will reset.\n Continue ?',
+                            textAlign: TextAlign.center,
+                          ),
+                          actions: [
+                            FilledButton.tonal(
+                              child: const Text('Yes'),
+                              onPressed: () {
+                                _resetGame();
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            FilledButton(
+                              child: const Text('No'),
+                              onPressed: () {
+                                _resetGame();
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      );
+    });
+  }
+}
+
+class DraggableNumber extends StatelessWidget {
+  const DraggableNumber({
+    super.key,
+    required int currentNumber,
+  }) : _currentNumber = currentNumber;
+
+  final int _currentNumber;
+
+  @override
+  Widget build(BuildContext context) {
+    return Draggable<int>(
+      data: _currentNumber,
+      onDragUpdate: (details) => print(details.localPosition.dy),
+      feedback: Material(
+        child: Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.secondaryContainer,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          padding: const EdgeInsets.all(8),
+          child: Text(
+            _currentNumber.toString(),
+            style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+          ),
+        ),
+      ),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.secondaryContainer,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        padding: const EdgeInsets.all(8),
+        child: Text(
+          _currentNumber.toString(),
+          style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+        ),
       ),
     );
   }
