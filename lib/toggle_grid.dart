@@ -9,16 +9,20 @@ class TogglesGrid extends StatefulWidget {
 
 class _TogglesGridState extends State<TogglesGrid> {
   List<Widget> _getTogglesNumber() => List.generate(
-      20,
-      (index) => Align(
-          alignment: Alignment.topLeft,
-          child: Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: Text(
-              (index + 1).toString(),
-              style: const TextStyle(fontSize: 10),
+        20,
+        (index) => DragTarget<int>(
+          builder: (BuildContext context, List<Object?> candidateData, List<dynamic> rejectedData) => Align(
+            alignment: Alignment.topLeft,
+            child: Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Text(
+                (index + 1).toString(),
+                style: const TextStyle(fontSize: 10),
+              ),
             ),
-          )));
+          ),
+        ),
+      );
 
   final List<bool> _selected = List.filled(20, false);
 
