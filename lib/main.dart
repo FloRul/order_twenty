@@ -61,7 +61,6 @@ class _GamePageState extends State<GamePage> {
       _alreadyPickedNumbers.clear();
       _currentNumber = Random().nextInt(1000);
       _alreadyPickedNumbers.add(_currentNumber);
-      _remainingToOrder = 19;
     });
   }
 
