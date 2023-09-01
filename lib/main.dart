@@ -34,14 +34,12 @@ class GamePage extends StatefulWidget {
 
 class _GamePageState extends State<GamePage> {
   late int _currentNumber;
-  late int _remainingToOrder;
   late final Set<int> _alreadyPickedNumbers = {};
 
   @override
   void initState() {
     _currentNumber = Random().nextInt(1000);
     _alreadyPickedNumbers.add(_currentNumber);
-    _remainingToOrder = 20;
     super.initState();
   }
 
@@ -167,16 +165,22 @@ class DraggableNumber extends StatelessWidget {
       borderRadius: BorderRadius.circular(10),
       child: Draggable<int>(
         data: _currentNumber,
-        onDragUpdate: (details) => print(details.localPosition.dy),
         feedback: ClipRRect(
           borderRadius: BorderRadius.circular(10),
           child: Material(
             child: Container(
+              width: 50,
+              height: 50,
               color: Theme.of(context).colorScheme.secondaryContainer,
               padding: const EdgeInsets.all(8),
-              child: Text(
-                _currentNumber.toString(),
-                style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+              child: Center(
+                child: Text(
+                  _currentNumber.toString(),
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ),
           ),
