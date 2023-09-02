@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:order_twenty/widgets/bottom_bar.dart';
-import 'package:order_twenty/widgets/draggable_number.dart';
-import 'package:order_twenty/widgets/toggle_grid.dart';
+import 'package:order_twenty/widgets/game_view.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
@@ -38,28 +36,7 @@ class GamePage extends StatelessWidget {
             backgroundColor: Theme.of(context).colorScheme.inversePrimary,
             title: Text(title),
           ),
-          body: const Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Column(
-                children: [
-                  SizedBox(height: 16),
-                  Text('Number to order:'),
-                  DraggableNumber(),
-                ],
-              ),
-              Expanded(
-                child: Center(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
-                    child: TogglesGrid(),
-                  ),
-                ),
-              ),
-              BottomBar(),
-            ],
-          ),
+          body: const GameView(),
         );
       },
     );
