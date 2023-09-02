@@ -10,9 +10,12 @@ class DraggableNumber extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = ref.watch(gameControllerNotifierProvider);
+    final notifier = ref.read(gameControllerNotifierProvider.notifier);
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: Draggable<int>(
+        onDragStarted: () => notifier.dragging = true,
+        onDragEnd: (_) => notifier.dragging = false,
         data: controller.currentNumber,
         feedback: ClipRRect(
           borderRadius: BorderRadius.circular(10),

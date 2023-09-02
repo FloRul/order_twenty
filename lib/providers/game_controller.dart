@@ -60,4 +60,6 @@ class GameControllerNotifier extends _$GameControllerNotifier {
     );
     setNextNumber();
   }
+
+  set dragging(bool value) => state = state.copyWith(dragging: value);
 }

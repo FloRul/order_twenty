@@ -2,6 +2,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:order_twenty/providers/game_controller.dart';
 
+enum SlotState { none, candidate, accepted }
+
 class NumberSlot extends ConsumerStatefulWidget {
   const NumberSlot({required this.index, super.key});
 
@@ -13,10 +15,12 @@ class NumberSlot extends ConsumerStatefulWidget {
 
 class _NumberSlotState extends ConsumerState<NumberSlot> {
   late int? _data;
+  late SlotState _state;
 
   @override
   void initState() {
     _data = null;
+    _state = SlotState.none;
     super.initState();
   }
 
@@ -24,24 +28,35 @@ class _NumberSlotState extends ConsumerState<NumberSlot> {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     var notifier = ref.read(gameControllerNotifierProvider.notifier);
+    ref.listen<bool>(gameControllerNotifierProvider.select((value) => value.dragging), (previous, next) {
+      if (_state != SlotState.accepted) {
+        setState(() {
+          _state = next && notifier.availableSlots.contains(widget.index) ? SlotState.candidate : SlotState.none;
+        });
+      }
+    });
     return DragTarget<int>(
       onAccept: (data) {
         setState(() {
           _data = data;
+          _state = SlotState.accepted;
         });
         notifier.putNumber(widget.index);
       },
       onWillAccept: (data) => notifier.availableSlots.contains(widget.index),
-      onMove: (details) => print('moving on #${widget.index} : ${details.offset}'),
-      onLeave: (data) => print('leaving target #${widget.index}'),
       builder: (BuildContext context, List<Object?> candidateData, List<dynamic> rejectedData) => AnimatedContainer(
         width: 50,
         height: 50,
         decoration: BoxDecoration(
-          border: Border.all(color: Theme.of(context).colorScheme.onBackground),
-          borderRadius: BorderRadius.circular(10),
-          color: _data != null ? scheme.onPrimary : scheme.background,
-        ),
+            border: Border.all(color: Theme.of(context).colorScheme.onBackground),
+            borderRadius: BorderRadius.circular(10),
+            color: switch (_state) {
+              SlotState.accepted => scheme.onPrimary,
+              SlotState.none => scheme.inversePrimary,
+              SlotState.candidate => scheme.tertiary
+            }
+            // _data != null ? scheme.onPrimary : scheme.inversePrimary,
+            ),
         duration: const Duration(milliseconds: 200),
         child: Stack(
           children: [

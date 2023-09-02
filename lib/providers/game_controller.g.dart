@@ -7,7 +7,7 @@ part of 'game_controller.dart';
 // **************************************************************************
 
 String _$gameControllerNotifierHash() =>
-    r'5d2b56a3ecba14ecd9a2436e5904000ebb0bb7d2';
+    r'63d8e3533fc75fa257bd2d239284ffdcc0af9583';
 
 /// See also [GameControllerNotifier].
 @ProviderFor(GameControllerNotifier)
