@@ -1,19 +1,19 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:order_twenty/providers/game_controller.dart';
 
-class DraggableNumber extends StatelessWidget {
+class DraggableNumber extends ConsumerWidget {
   const DraggableNumber({
     super.key,
-    required int currentNumber,
-  }) : _currentNumber = currentNumber;
-
-  final int _currentNumber;
+  });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final controller = ref.watch(gameControllerNotifierProvider);
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: Draggable<int>(
-        data: _currentNumber,
+        data: controller.currentNumber,
         feedback: ClipRRect(
           borderRadius: BorderRadius.circular(10),
           child: Material(
@@ -24,7 +24,7 @@ class DraggableNumber extends StatelessWidget {
               padding: const EdgeInsets.all(8),
               child: Center(
                 child: Text(
-                  _currentNumber.toString(),
+                  controller.currentNumber.toString(),
                   style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.bold,
@@ -39,7 +39,7 @@ class DraggableNumber extends StatelessWidget {
             color: Theme.of(context).colorScheme.secondaryContainer,
             padding: const EdgeInsets.all(8),
             child: Text(
-              _currentNumber.toString(),
+              controller.currentNumber.toString(),
               style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
             ),
           ),

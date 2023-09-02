@@ -15,12 +15,10 @@ class NumberSlot extends StatefulWidget {
 
 class _NumberSlotState extends State<NumberSlot> {
   late int? _data;
-  late bool _canAcceptData;
 
   @override
   void initState() {
     _data = widget.data;
-    _canAcceptData = false;
     super.initState();
   }
 

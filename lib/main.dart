@@ -25,14 +25,13 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class GamePage extends ConsumerWidget {
+class GamePage extends StatelessWidget {
   const GamePage({super.key, required this.title});
 
   final String title;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final controller = ref.watch(gameControllerNotifierProvider);
+  Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (_, constraints) {
         return Scaffold(
@@ -40,18 +39,18 @@ class GamePage extends ConsumerWidget {
             backgroundColor: Theme.of(context).colorScheme.inversePrimary,
             title: Text(title),
           ),
-          body: Column(
+          body: const Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Column(
                 children: [
-                  const SizedBox(height: 16),
-                  const Text('Number to order:'),
-                  DraggableNumber(currentNumber: controller.currentNumber),
+                  SizedBox(height: 16),
+                  Text('Number to order:'),
+                  DraggableNumber(),
                 ],
               ),
-              const Expanded(
+              Expanded(
                 child: Center(
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20),
@@ -59,7 +58,7 @@ class GamePage extends ConsumerWidget {
                   ),
                 ),
               ),
-              const BottomBar(),
+              BottomBar(),
             ],
           ),
         );

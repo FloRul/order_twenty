@@ -11,9 +11,18 @@ class GameControllerNotifier extends _$GameControllerNotifier {
     return GameState.init();
   }
 
-  void setNextNumber() => state = state.copyWith(
-        currentNumber: Random().nextInt(1000),
-      );
+  void setNextNumber() {
+    int nextInt = Random().nextInt(1000);
+    if (state.alreadyPickedNumbers.contains(nextInt)) {
+      do {
+        nextInt = Random().nextInt(1000);
+      } while (!state.alreadyPickedNumbers.contains(nextInt));
+    }
+    state = state.copyWith(
+      currentNumber: nextInt,
+      alreadyPickedNumbers: Set.from(state.alreadyPickedNumbers)..add(nextInt),
+    );
+  }
 
   void reset() => state = GameState.init();
 }
