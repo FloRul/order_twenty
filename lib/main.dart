@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:order_twenty/widgets/bottom_bar.dart';
 import 'package:order_twenty/widgets/draggable_number.dart';
-import 'package:order_twenty/providers/game_controller.dart';
 import 'package:order_twenty/widgets/toggle_grid.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {

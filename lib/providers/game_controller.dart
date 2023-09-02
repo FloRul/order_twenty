@@ -25,4 +25,39 @@ class GameControllerNotifier extends _$GameControllerNotifier {
   }
 
   void reset() => state = GameState.init();
+
+  List<int> get availableSlots {
+    List<int> res = [];
+
+    final lastMinor = state.slots.lastIndexWhere((element) => element != null && element < state.currentNumber);
+    final firstMajor = state.slots.indexWhere((element) => element != null && element > state.currentNumber);
+
+    res = switch ((lastMinor, firstMajor)) {
+      (-1, -1) => List.generate(state.size, (index) => index),
+      (-1, _) => List.generate(
+          firstMajor,
+          (index) => index,
+        ),
+      (_, -1) => List.generate(
+          state.size - lastMinor,
+          (index) => lastMinor + index,
+        ),
+      (_, _) => List.generate(
+          firstMajor - lastMinor - 1,
+          (index) => lastMinor + index + 1,
+        ),
+    };
+
+    return res;
+  }
+
+  void putNumber(int index) {
+    state = state.copyWith(
+      slots: [
+        for (int i = 0; i < state.slots.length; i++)
+          if (index == i) state.currentNumber else state.slots[i]
+      ],
+    );
+    setNextNumber();
+  }
 }

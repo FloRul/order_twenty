@@ -19,6 +19,7 @@ mixin _$GameState {
   int get currentNumber => throw _privateConstructorUsedError;
   List<int?> get slots => throw _privateConstructorUsedError;
   Set<int> get alreadyPickedNumbers => throw _privateConstructorUsedError;
+  int get size => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $GameStateCopyWith<GameState> get copyWith =>
@@ -31,7 +32,10 @@ abstract class $GameStateCopyWith<$Res> {
       _$GameStateCopyWithImpl<$Res, GameState>;
   @useResult
   $Res call(
-      {int currentNumber, List<int?> slots, Set<int> alreadyPickedNumbers});
+      {int currentNumber,
+      List<int?> slots,
+      Set<int> alreadyPickedNumbers,
+      int size});
 }
 
 /// @nodoc
@@ -50,6 +54,7 @@ class _$GameStateCopyWithImpl<$Res, $Val extends GameState>
     Object? currentNumber = null,
     Object? slots = null,
     Object? alreadyPickedNumbers = null,
+    Object? size = null,
   }) {
     return _then(_value.copyWith(
       currentNumber: null == currentNumber
@@ -64,6 +69,10 @@ class _$GameStateCopyWithImpl<$Res, $Val extends GameState>
           ? _value.alreadyPickedNumbers
           : alreadyPickedNumbers // ignore: cast_nullable_to_non_nullable
               as Set<int>,
+      size: null == size
+          ? _value.size
+          : size // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 }
@@ -76,7 +85,10 @@ abstract class _$$_GameStateCopyWith<$Res> implements $GameStateCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {int currentNumber, List<int?> slots, Set<int> alreadyPickedNumbers});
+      {int currentNumber,
+      List<int?> slots,
+      Set<int> alreadyPickedNumbers,
+      int size});
 }
 
 /// @nodoc
@@ -93,6 +105,7 @@ class __$$_GameStateCopyWithImpl<$Res>
     Object? currentNumber = null,
     Object? slots = null,
     Object? alreadyPickedNumbers = null,
+    Object? size = null,
   }) {
     return _then(_$_GameState(
       currentNumber: null == currentNumber
@@ -107,6 +120,10 @@ class __$$_GameStateCopyWithImpl<$Res>
           ? _value._alreadyPickedNumbers
           : alreadyPickedNumbers // ignore: cast_nullable_to_non_nullable
               as Set<int>,
+      size: null == size
+          ? _value.size
+          : size // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -117,7 +134,8 @@ class _$_GameState implements _GameState {
   const _$_GameState(
       {required this.currentNumber,
       required final List<int?> slots,
-      required final Set<int> alreadyPickedNumbers})
+      required final Set<int> alreadyPickedNumbers,
+      required this.size})
       : _slots = slots,
         _alreadyPickedNumbers = alreadyPickedNumbers;
 
@@ -141,8 +159,11 @@ class _$_GameState implements _GameState {
   }
 
   @override
+  final int size;
+
+  @override
   String toString() {
-    return 'GameState(currentNumber: $currentNumber, slots: $slots, alreadyPickedNumbers: $alreadyPickedNumbers)';
+    return 'GameState(currentNumber: $currentNumber, slots: $slots, alreadyPickedNumbers: $alreadyPickedNumbers, size: $size)';
   }
 
   @override
@@ -154,7 +175,8 @@ class _$_GameState implements _GameState {
                 other.currentNumber == currentNumber) &&
             const DeepCollectionEquality().equals(other._slots, _slots) &&
             const DeepCollectionEquality()
-                .equals(other._alreadyPickedNumbers, _alreadyPickedNumbers));
+                .equals(other._alreadyPickedNumbers, _alreadyPickedNumbers) &&
+            (identical(other.size, size) || other.size == size));
   }
 
   @override
@@ -162,7 +184,8 @@ class _$_GameState implements _GameState {
       runtimeType,
       currentNumber,
       const DeepCollectionEquality().hash(_slots),
-      const DeepCollectionEquality().hash(_alreadyPickedNumbers));
+      const DeepCollectionEquality().hash(_alreadyPickedNumbers),
+      size);
 
   @JsonKey(ignore: true)
   @override
@@ -175,7 +198,8 @@ abstract class _GameState implements GameState {
   const factory _GameState(
       {required final int currentNumber,
       required final List<int?> slots,
-      required final Set<int> alreadyPickedNumbers}) = _$_GameState;
+      required final Set<int> alreadyPickedNumbers,
+      required final int size}) = _$_GameState;
 
   @override
   int get currentNumber;
@@ -183,6 +207,8 @@ abstract class _GameState implements GameState {
   List<int?> get slots;
   @override
   Set<int> get alreadyPickedNumbers;
+  @override
+  int get size;
   @override
   @JsonKey(ignore: true)
   _$$_GameStateCopyWith<_$_GameState> get copyWith =>
