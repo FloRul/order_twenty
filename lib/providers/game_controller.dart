@@ -11,5 +11,9 @@ class GameControllerNotifier extends _$GameControllerNotifier {
     return GameState.init();
   }
 
-  void setNextNumber() => state = state.copyWith(currentNumber: Random().nextInt(1000));
+  void setNextNumber() => state = state.copyWith(
+        currentNumber: Random().nextInt(1000),
+      );
+
+  void reset() => state = GameState.init();
 }

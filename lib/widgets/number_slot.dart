@@ -1,44 +1,7 @@
 ﻿import 'package:flutter/material.dart';
 
-class TogglesGrid extends StatefulWidget {
-  const TogglesGrid({super.key, this.size = 20});
-  final int size;
-  @override
-  State<TogglesGrid> createState() => _TogglesGridState();
-}
-
-class _TogglesGridState extends State<TogglesGrid> {
-  late final Map<int, int?> _slots;
-
-  List<Widget> _getTogglesNumber() => List.generate(
-        20,
-        (index) => NumberTarget(
-          index: index,
-        ),
-      );
-
-  @override
-  void initState() {
-    _slots = List.filled(widget.size, null).asMap();
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Wrap(
-      spacing: 12,
-      runAlignment: WrapAlignment.spaceEvenly,
-      alignment: WrapAlignment.spaceEvenly,
-      runSpacing: 12,
-      children: _getTogglesNumber().asMap().entries.map((widget) {
-        return widget.value;
-      }).toList(),
-    );
-  }
-}
-
-class NumberTarget extends StatefulWidget {
-  const NumberTarget({
+class NumberSlot extends StatefulWidget {
+  const NumberSlot({
     super.key,
     required this.index,
     this.data,
@@ -47,10 +10,10 @@ class NumberTarget extends StatefulWidget {
   final int? data;
 
   @override
-  State<NumberTarget> createState() => _NumberTargetState();
+  State<NumberSlot> createState() => _NumberSlotState();
 }
 
-class _NumberTargetState extends State<NumberTarget> {
+class _NumberSlotState extends State<NumberSlot> {
   late int? _data;
   late bool _canAcceptData;
 
