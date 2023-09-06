@@ -30,9 +30,7 @@ class GameControllerNotifier extends _$GameControllerNotifier {
     List<int> res = [];
 
     var lastMinor = state.slots.lastIndexWhere((element) => element != null && element < state.currentNumber);
-    if (lastMinor == state.size - 1) lastMinor = -1;
     var firstMajor = state.slots.indexWhere((element) => element != null && element > state.currentNumber);
-    if (firstMajor == 0) firstMajor = -1;
     res = switch ((lastMinor, firstMajor)) {
       (-1, -1) => List.generate(state.size, (index) => index),
       (-1, _) => List.generate(
@@ -40,8 +38,8 @@ class GameControllerNotifier extends _$GameControllerNotifier {
           (index) => index,
         ),
       (_, -1) => List.generate(
-          state.size - lastMinor,
-          (index) => lastMinor + index,
+          state.size - lastMinor - 1,
+          (index) => lastMinor + index + 1,
         ),
       (_, _) => List.generate(
           firstMajor - lastMinor - 1,
