@@ -1,82 +1,122 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:order_twenty/providers/game_controller.dart';
+import 'package:order_twenty/providers/theme_controller.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+part 'number_slot.g.dart';
 
-enum SlotState { none, candidate, accepted }
+@riverpod
+SlotState slotState(SlotStateRef ref, int index) {
+  var isDragging = ref.watch(
+    gameControllerNotifierProvider.select(
+      (value) => value.dragging,
+    ),
+  );
 
-class NumberSlot extends ConsumerStatefulWidget {
-  const NumberSlot({required this.index, super.key});
+  var availableSlots = ref.watch(
+    gameControllerNotifierProvider.notifier.select(
+      (value) => value.availableSlots,
+    ),
+  );
 
-  final int index;
-
-  @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _NumberSlotState();
+  var slots = ref.watch(
+    gameControllerNotifierProvider.select(
+      (value) => value.slots,
+    ),
+  );
+  var canReceive = availableSlots.contains(index);
+  var hasAccepted = slots[index] != null;
+  var res = switch ((isDragging, canReceive, hasAccepted)) {
+    (true, true, false) => SlotState.candidate,
+    (_, _, true) => SlotState.accepted,
+    (_, _, false) => SlotState.idle,
+  };
+  return res;
 }
 
-class _NumberSlotState extends ConsumerState<NumberSlot> {
-  late int? _data;
-  late SlotState _state;
+enum SlotState {
+  idle,
+  candidate,
+  accepted,
+}
+
+class SlotNumber extends ConsumerStatefulWidget {
+  const SlotNumber({super.key, required this.index});
+  final int index;
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _SlotNumberState();
+}
+
+class _SlotNumberState extends ConsumerState<SlotNumber> {
+  late bool _onHovered;
 
   @override
   void initState() {
-    _data = null;
-    _state = SlotState.none;
+    _onHovered = false;
     super.initState();
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _onHovered = false;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
+    final scheme = ref.watch(themeControllerProvider.notifier).colorScheme;
     var notifier = ref.read(gameControllerNotifierProvider.notifier);
-    ref.listen<bool>(gameControllerNotifierProvider.select((value) => value.dragging), (previous, next) {
-      if (_state != SlotState.accepted) {
-        setState(() {
-          _state = next && notifier.availableSlots.contains(widget.index) ? SlotState.candidate : SlotState.none;
-        });
-      }
-    });
+    var gameState = ref.watch(gameControllerNotifierProvider);
+    var slotState = ref.watch(slotStateProvider(widget.index));
     return DragTarget<int>(
       onAccept: (data) {
-        setState(() {
-          _data = data;
-          _state = SlotState.accepted;
-        });
         notifier.putNumber(widget.index);
+        setState(() {
+          _onHovered = false;
+        });
       },
       onWillAccept: (data) => notifier.availableSlots.contains(widget.index),
-      builder: (BuildContext context, List<Object?> candidateData, List<dynamic> rejectedData) => AnimatedContainer(
-        width: 50,
-        height: 50,
-        decoration: BoxDecoration(
-            border: Border.all(color: Theme.of(context).colorScheme.onBackground),
-            borderRadius: BorderRadius.circular(10),
-            color: switch (_state) {
-              SlotState.accepted => scheme.onPrimary,
-              SlotState.none => scheme.inversePrimary,
-              SlotState.candidate => scheme.tertiary
-            }
-            // _data != null ? scheme.onPrimary : scheme.inversePrimary,
-            ),
-        duration: const Duration(milliseconds: 200),
-        child: Stack(
-          children: [
-            Align(
-              alignment: Alignment.topLeft,
-              child: Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: Text(
-                  (widget.index + 1).toString(),
-                  style: const TextStyle(fontSize: 10),
+      onMove: (_) => setState(() {
+        _onHovered = true;
+      }),
+      onLeave: (_) => setState(() {
+        _onHovered = false;
+      }),
+      builder: (context, candidateData, rejectedData) {
+        return AnimatedContainer(
+          width: 50,
+          height: 50,
+          decoration: BoxDecoration(
+              border: Border.all(color: Theme.of(context).colorScheme.onBackground),
+              borderRadius: BorderRadius.circular(10),
+              color: switch (slotState) {
+                SlotState.idle => scheme.primary,
+                SlotState.accepted => scheme.primaryContainer,
+                SlotState.candidate => _onHovered ? scheme.tertiary : scheme.secondary,
+              }
+              // _data != null ? scheme.onPrimary : scheme.inversePrimary,
+              ),
+          duration: const Duration(milliseconds: 200),
+          child: Stack(
+            children: [
+              Align(
+                alignment: Alignment.topLeft,
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Text(
+                    (widget.index + 1).toString(),
+                    style: const TextStyle(fontSize: 10),
+                  ),
                 ),
               ),
-            ),
-            Visibility(
-              visible: _data != null,
-              child: Center(child: Text(_data?.toString() ?? '')),
-            )
-          ],
-        ),
-      ),
+              Visibility(
+                visible: gameState.slots[widget.index] != null,
+                child: Center(child: Text(gameState.slots[widget.index]?.toString() ?? '')),
+              )
+            ],
+          ),
+        );
+      },
     );
   }
 }

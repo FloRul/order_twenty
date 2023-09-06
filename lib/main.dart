@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:order_twenty/providers/theme_controller.dart';
 import 'package:order_twenty/widgets/game_view.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    var theme = ref.watch(themeControllerProvider);
     return MaterialApp(
       title: 'Order twenty',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueGrey),
-        useMaterial3: true,
-      ),
+      theme: theme.$1,
+      darkTheme: theme.$2,
       home: const GamePage(title: 'Order twenty'),
     );
   }

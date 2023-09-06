@@ -29,9 +29,10 @@ class GameControllerNotifier extends _$GameControllerNotifier {
   List<int> get availableSlots {
     List<int> res = [];
 
-    final lastMinor = state.slots.lastIndexWhere((element) => element != null && element < state.currentNumber);
-    final firstMajor = state.slots.indexWhere((element) => element != null && element > state.currentNumber);
-
+    var lastMinor = state.slots.lastIndexWhere((element) => element != null && element < state.currentNumber);
+    if (lastMinor == state.size - 1) lastMinor = -1;
+    var firstMajor = state.slots.indexWhere((element) => element != null && element > state.currentNumber);
+    if (firstMajor == 0) firstMajor = -1;
     res = switch ((lastMinor, firstMajor)) {
       (-1, -1) => List.generate(state.size, (index) => index),
       (-1, _) => List.generate(
