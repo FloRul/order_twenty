@@ -1,6 +1,7 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:order_twenty/providers/game_controller.dart';
+import 'package:order_twenty/widgets/dialogs/reset_game_dialog.dart';
 
 class BottomBar extends ConsumerWidget {
   const BottomBar({
@@ -31,30 +32,22 @@ class BottomBar extends ConsumerWidget {
           IconButton.filled(
             icon: const Icon(Icons.refresh),
             onPressed: () {
-              showDialog(
+              showGeneralDialog(
+                barrierDismissible: false,
                 context: context,
-                builder: (context) => AlertDialog.adaptive(
-                  actionsAlignment: MainAxisAlignment.center,
-                  content: const Text(
-                    'The game will reset.\n Continue ?',
-                    textAlign: TextAlign.center,
+                pageBuilder: (context, a1, a2) => ResetGameDialog(
+                  onResetAccepted: () {
+                    notifier.reset();
+                    Navigator.of(context).pop();
+                  },
+                  onResetDenied: () => Navigator.of(context).pop(),
+                ),
+                transitionBuilder: (context, a1, a2, child) => FadeTransition(
+                  opacity: a1,
+                  child: Transform.translate(
+                    offset: Offset(0, a1.value * -100),
+                    child: child,
                   ),
-                  actions: [
-                    FilledButton.tonal(
-                      child: const Text('Yes'),
-                      onPressed: () {
-                        notifier.reset();
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                    FilledButton(
-                      child: const Text('No'),
-                      onPressed: () {
-                        notifier.reset();
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ],
                 ),
               );
             },
