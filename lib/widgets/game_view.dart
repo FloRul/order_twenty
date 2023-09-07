@@ -39,18 +39,22 @@ class GameView extends ConsumerWidget {
         }
       },
     );
-    return const Column(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Column(
           children: [
-            SizedBox(height: 16),
-            Text('Number to order:'),
-            DraggableNumber(),
+            const SizedBox(height: 16),
+            const Text('Number to order:'),
+            DraggableNumber(
+              initialNumber: ref.watch(gameControllerNotifierProvider.select(
+                (value) => value.currentNumber,
+              )),
+            ),
           ],
         ),
-        Expanded(
+        const Expanded(
           child: Center(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
@@ -58,7 +62,7 @@ class GameView extends ConsumerWidget {
             ),
           ),
         ),
-        BottomBar(),
+        const BottomBar(),
       ],
     );
   }
