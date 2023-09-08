@@ -1,19 +1,23 @@
 ﻿import 'package:flutter/material.dart';
 
-class XDraggable extends StatefulWidget {
-  const XDraggable(
-      {Key? key, required this.child, required this.originalX, required this.originalY, this.animationSpeed = 200})
-      : super(key: key);
+class AnimatedDraggable extends StatefulWidget {
+  const AnimatedDraggable({
+    Key? key,
+    required this.child,
+    required this.originalX,
+    required this.originalY,
+    this.animationSpeed = 200,
+  }) : super(key: key);
   final Widget child;
   final double originalX;
   final double originalY;
   final double animationSpeed;
 
   @override
-  XDraggableState createState() => XDraggableState();
+  AnimatedDraggableState createState() => AnimatedDraggableState();
 }
 
-class XDraggableState extends State<XDraggable> {
+class AnimatedDraggableState extends State<AnimatedDraggable> {
   double x = 200;
   double y = 200;
 

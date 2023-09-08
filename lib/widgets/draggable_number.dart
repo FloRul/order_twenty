@@ -6,6 +6,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:order_twenty/providers/game_controller.dart';
 import 'package:order_twenty/providers/theme_controller.dart';
+import 'package:order_twenty/widgets/current_number.dart';
 
 class DraggableNumber extends StatefulHookConsumerWidget {
   const DraggableNumber({
@@ -70,43 +71,6 @@ class _DraggableNumberState extends ConsumerState<DraggableNumber> with TickerPr
         )
             .animate(controller: flipController)
             .flip(direction: Random().nextBool() ? Axis.vertical : Axis.horizontal, curve: Curves.easeOut),
-      ),
-    );
-  }
-}
-
-class CurrentNumber extends ConsumerWidget {
-  const CurrentNumber({required this.number, super.key});
-  final int number;
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final scheme = ref.watch(themeControllerProvider.notifier).colorScheme;
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(10),
-      child: Material(
-        child: Container(
-          width: 50,
-          height: 50,
-          decoration: BoxDecoration(
-              color: scheme.background,
-              border: Border.all(
-                color: scheme.primary,
-                width: 5,
-              ),
-              borderRadius: BorderRadius.circular(10)),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Center(
-              child: Text(
-                number.toString(),
-                style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
-        ),
       ),
     );
   }
