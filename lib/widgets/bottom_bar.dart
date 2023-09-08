@@ -21,38 +21,28 @@ class BottomBar extends ConsumerWidget {
           topRight: Radius.circular(10),
         ),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          ElevatedButton(
-            onPressed: notifier.setNextNumber,
-            child: const Text('Next number'),
-          ),
-          const SizedBox(width: 8),
-          IconButton.filled(
-            icon: const Icon(Icons.refresh),
-            onPressed: () {
-              showGeneralDialog(
-                barrierDismissible: false,
-                context: context,
-                pageBuilder: (context, a1, a2) => ResetGameDialog(
-                  onResetAccepted: () {
-                    notifier.reset();
-                    Navigator.of(context).pop();
-                  },
-                  onResetDenied: () => Navigator.of(context).pop(),
-                ),
-                transitionBuilder: (context, a1, a2, child) => FadeTransition(
-                  opacity: a1,
-                  child: Transform.translate(
-                    offset: Offset(0, a1.value * -100),
-                    child: child,
-                  ),
-                ),
-              );
-            },
-          ),
-        ],
+      child: IconButton.filled(
+        icon: const Icon(Icons.refresh),
+        onPressed: () {
+          showGeneralDialog(
+            barrierDismissible: false,
+            context: context,
+            pageBuilder: (context, a1, a2) => ResetGameDialog(
+              onResetAccepted: () {
+                notifier.reset();
+                Navigator.of(context).pop();
+              },
+              onResetDenied: () => Navigator.of(context).pop(),
+            ),
+            transitionBuilder: (context, a1, a2, child) => FadeTransition(
+              opacity: a1,
+              child: Transform.translate(
+                offset: Offset(0, a1.value * -100),
+                child: child,
+              ),
+            ),
+          );
+        },
       ),
     );
   }

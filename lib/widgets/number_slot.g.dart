@@ -6,7 +6,7 @@ part of 'number_slot.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$slotStateHash() => r'56f57c685cb1da86644f6442e6ded11015eebe22';
+String _$slotStateHash() => r'a216d1c83fcc7c11060059bdf8535edee9daeab4';
 
 /// Copied from Dart SDK
 class _SystemHash {

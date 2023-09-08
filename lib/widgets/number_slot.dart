@@ -90,9 +90,9 @@ class _SlotNumberState extends ConsumerState<SlotNumber> {
               border: Border.all(color: Theme.of(context).colorScheme.onBackground),
               borderRadius: BorderRadius.circular(10),
               color: switch (slotState) {
-                SlotState.idle => scheme.primary,
+                SlotState.idle => scheme.surfaceVariant,
                 SlotState.accepted => scheme.primaryContainer,
-                SlotState.candidate => _onHovered ? scheme.tertiary : scheme.secondary,
+                SlotState.candidate => _onHovered ? scheme.outline : scheme.outlineVariant,
               }
               // _data != null ? scheme.onPrimary : scheme.inversePrimary,
               ),
