@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:order_twenty/misc/ad_helper.dart';
-import 'package:order_twenty/providers/ads_controller.dart';
 import 'package:order_twenty/providers/theme_controller.dart';
 import 'package:order_twenty/widgets/game_view.dart';
 
@@ -61,22 +60,18 @@ class _MainPageState extends ConsumerState<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ref.watch(adInitializationProvider).when(
-          data: (data) => Scaffold(
-            body: Column(
-              children: [
-                if (_bannerAd != null)
-                  SizedBox(
-                    width: _bannerAd!.size.width.toDouble(),
-                    height: _bannerAd!.size.height.toDouble(),
-                    child: AdWidget(ad: _bannerAd!),
-                  ),
-                const Expanded(child: GameView()),
-              ],
+    return Scaffold(
+      body: Column(
+        children: [
+          if (_bannerAd != null)
+            SizedBox(
+              width: _bannerAd!.size.width.toDouble(),
+              height: _bannerAd!.size.height.toDouble(),
+              child: AdWidget(ad: _bannerAd!),
             ),
-          ),
-          error: (error, stackTrace) => const Text('error loading ads initialization'),
-          loading: () => const Center(child: CircularProgressIndicator.adaptive()),
-        );
+          const Expanded(child: GameView()),
+        ],
+      ),
+    );
   }
 }

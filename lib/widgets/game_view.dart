@@ -1,4 +1,5 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:order_twenty/providers/game_controller.dart';
 import 'package:order_twenty/widgets/bottom_bar.dart';
@@ -31,11 +32,11 @@ class GameView extends ConsumerWidget {
         }
       },
     );
-    return const Column(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Column(
+        const Column(
           children: [
             SizedBox(height: 16),
             Text('Number to order:'),
@@ -46,12 +47,12 @@ class GameView extends ConsumerWidget {
         Expanded(
           child: Center(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: SlotGrid(),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: const SlotGrid().animate().slideX(begin: -1, end: 0),
             ),
           ),
         ),
-        BottomBar(),
+        const BottomBar(),
       ],
     );
   }
