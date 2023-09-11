@@ -2,9 +2,10 @@
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:order_twenty/providers/game_controller.dart';
+import 'package:order_twenty/widgets/animated_draggable.dart';
 import 'package:order_twenty/widgets/bottom_bar.dart';
+import 'package:order_twenty/widgets/current_number.dart';
 import 'package:order_twenty/widgets/dialogs/game_over_dialog.dart';
-import 'package:order_twenty/widgets/draggable_number.dart';
 import 'package:order_twenty/widgets/slot_grid.dart';
 
 class GameView extends ConsumerWidget {
@@ -32,28 +33,42 @@ class GameView extends ConsumerWidget {
         }
       },
     );
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        const Column(
-          children: [
-            SizedBox(height: 16),
-            Text('Number to order:'),
-            SizedBox(height: 16),
-            DraggableNumber(),
-          ],
-        ),
-        Expanded(
-          child: Center(
+    return LayoutBuilder(builder: (_, cst) {
+      const double size = 50;
+      return Stack(
+        fit: StackFit.expand,
+        children: [
+          const Align(
+            alignment: Alignment.topCenter,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.all(8.0),
+              child: Text('Number to order:'),
+            ),
+          ),
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: const SlotGrid().animate().slideX(begin: -1, end: 0),
             ),
           ),
-        ),
-        const BottomBar(),
-      ],
-    );
+          AnimatedDraggable<int>(
+            originalOffset: Offset(cst.maxWidth / 2 - size / 2, cst.maxHeight / 7),
+            data: ref.watch(
+              gameControllerNotifierProvider.select(
+                (value) => value.currentNumber,
+              ),
+            ),
+            builder: (data) => CurrentNumber(
+              number: data,
+              size: size,
+            ),
+          ),
+          const Align(
+            alignment: Alignment.bottomCenter,
+            child: BottomBar(),
+          ),
+        ],
+      );
+    });
   }
 }

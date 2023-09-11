@@ -5,7 +5,6 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:order_twenty/providers/game_controller.dart';
-import 'package:order_twenty/providers/theme_controller.dart';
 import 'package:order_twenty/widgets/current_number.dart';
 
 class DraggableNumber extends StatefulHookConsumerWidget {
@@ -55,6 +54,7 @@ class _DraggableNumberState extends ConsumerState<DraggableNumber> with TickerPr
           fadeScaleController.forward();
         }),
         feedback: CurrentNumber(
+          size: 50,
           number: currentNumber,
         )
             .animate(
@@ -67,6 +67,7 @@ class _DraggableNumberState extends ConsumerState<DraggableNumber> with TickerPr
               end: 0,
             ),
         child: CurrentNumber(
+          size: 50,
           number: currentNumber,
         )
             .animate(controller: flipController)

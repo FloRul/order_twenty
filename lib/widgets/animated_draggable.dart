@@ -1,33 +1,31 @@
 ﻿import 'package:flutter/material.dart';
 
-class AnimatedDraggable extends StatefulWidget {
+class AnimatedDraggable<T extends Object> extends StatefulWidget {
   const AnimatedDraggable({
     Key? key,
-    required this.child,
-    required this.originalX,
-    required this.originalY,
-    this.animationSpeed = 200,
+    required this.builder,
+    required this.data,
+    this.animationDuration = const Duration(milliseconds: 200),
+    required this.originalOffset,
   }) : super(key: key);
-  final Widget child;
-  final double originalX;
-  final double originalY;
-  final double animationSpeed;
+  final Widget Function(T) builder;
+  final Duration animationDuration;
+  final Offset originalOffset;
+  final T data;
 
   @override
-  AnimatedDraggableState createState() => AnimatedDraggableState();
+  AnimatedDraggableState<T> createState() => AnimatedDraggableState();
 }
 
-class AnimatedDraggableState extends State<AnimatedDraggable> {
-  double x = 200;
-  double y = 200;
-
-  int animationSpeed = 0;
+class AnimatedDraggableState<T extends Object> extends State<AnimatedDraggable<T>> {
+  double x = 0;
+  double y = 0;
+  Duration animationDuration = Duration.zero;
 
   @override
   void initState() {
-    x = widget.originalX;
-    y = widget.originalY;
-
+    x = widget.originalOffset.dx;
+    y = widget.originalOffset.dy;
     super.initState();
   }
 
@@ -36,24 +34,25 @@ class AnimatedDraggableState extends State<AnimatedDraggable> {
     return AnimatedPositioned(
       left: x,
       top: y,
-      duration: Duration(milliseconds: animationSpeed),
-      child: Draggable(
-        onDragUpdate: (details) => {
+      duration: animationDuration,
+      child: Draggable<T>(
+        data: widget.data,
+        onDragUpdate: (details) {
           setState(() {
-            animationSpeed = 0;
-            x = x + details.delta.dx;
-            y = y + details.delta.dy;
-          }),
-        },
-        onDragEnd: (details) {
-          setState(() {
-            animationSpeed = 200;
-            x = widget.originalX;
-            y = widget.originalY;
+            animationDuration = Duration.zero;
+            x += details.delta.dx;
+            y += details.delta.dy;
           });
         },
-        feedback: const SizedBox.shrink(),
-        child: widget.child,
+        onDragEnd: (details) {
+          animationDuration = details.wasAccepted ? Duration.zero : widget.animationDuration;
+          setState(() {
+            x = widget.originalOffset.dx;
+            y = widget.originalOffset.dy;
+          });
+        },
+        feedback: widget.builder(widget.data),
+        child: widget.builder(widget.data),
       ),
     );
   }

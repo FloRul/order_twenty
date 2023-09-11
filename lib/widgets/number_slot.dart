@@ -76,9 +76,12 @@ class _SlotNumberState extends ConsumerState<SlotNumber> {
         });
       },
       onWillAccept: (data) => notifier.availableSlots.contains(widget.index),
-      onMove: (_) => setState(() {
-        _onHovered = true;
-      }),
+      onMove: (_) {
+        print('move on ${widget.index}');
+        setState(() {
+          _onHovered = true;
+        });
+      },
       onLeave: (_) => setState(() {
         _onHovered = false;
       }),
@@ -93,9 +96,7 @@ class _SlotNumberState extends ConsumerState<SlotNumber> {
                 SlotState.idle => scheme.surfaceVariant,
                 SlotState.accepted => scheme.primaryContainer,
                 SlotState.candidate => _onHovered ? scheme.outline : scheme.outlineVariant,
-              }
-              // _data != null ? scheme.onPrimary : scheme.inversePrimary,
-              ),
+              }),
           duration: const Duration(milliseconds: 200),
           child: Stack(
             children: [
