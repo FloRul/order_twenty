@@ -51,17 +51,8 @@ class GameView extends ConsumerWidget {
               child: const SlotGrid().animate().slideX(begin: -1, end: 0),
             ),
           ),
-          AnimatedDraggable<int>(
+          AnimatedDraggable(
             originalOffset: Offset(cst.maxWidth / 2 - size / 2, cst.maxHeight / 7),
-            data: ref.watch(
-              gameControllerNotifierProvider.select(
-                (value) => value.currentNumber,
-              ),
-            ),
-            builder: (data) => CurrentNumber(
-              number: data,
-              size: size,
-            ),
           ),
           const Align(
             alignment: Alignment.bottomCenter,

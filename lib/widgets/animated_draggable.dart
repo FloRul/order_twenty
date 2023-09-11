@@ -1,23 +1,24 @@
-﻿import 'package:flutter/material.dart';
+﻿import 'dart:math';
 
-class AnimatedDraggable<T extends Object> extends StatefulWidget {
+import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:order_twenty/providers/game_controller.dart';
+import 'package:order_twenty/widgets/current_number.dart';
+
+class AnimatedDraggable extends StatefulHookConsumerWidget {
   const AnimatedDraggable({
     Key? key,
-    required this.builder,
-    required this.data,
-    this.animationDuration = const Duration(milliseconds: 200),
     required this.originalOffset,
   }) : super(key: key);
-  final Widget Function(T) builder;
-  final Duration animationDuration;
   final Offset originalOffset;
-  final T data;
 
   @override
-  AnimatedDraggableState<T> createState() => AnimatedDraggableState();
+  ConsumerState<ConsumerStatefulWidget> createState() => AnimatedDraggableState();
 }
 
-class AnimatedDraggableState<T extends Object> extends State<AnimatedDraggable<T>> {
+class AnimatedDraggableState extends ConsumerState<AnimatedDraggable> with TickerProviderStateMixin {
   double x = 0;
   double y = 0;
   Duration animationDuration = Duration.zero;
@@ -31,12 +32,37 @@ class AnimatedDraggableState<T extends Object> extends State<AnimatedDraggable<T
 
   @override
   Widget build(BuildContext context) {
+    var flipController = useAnimationController(vsync: this, duration: const Duration(milliseconds: 300));
+    var fadeScaleController = useAnimationController(vsync: this, duration: const Duration(milliseconds: 1000));
+    var runFadeScaleDown = useState<bool>(false);
+    runFadeScaleDown.addListener(
+      () {
+        if (runFadeScaleDown.value) {
+          fadeScaleController.repeat();
+        } else {
+          fadeScaleController.stop();
+        }
+      },
+    );
+    ref.listen(
+      gameControllerNotifierProvider.select(
+        (value) => value.currentNumber,
+      ),
+      (_, __) => setState(() {
+        flipController.reset();
+        flipController.forward();
+        runFadeScaleDown.value = !runFadeScaleDown.value;
+      }),
+    );
+    final currentNumber = ref.watch(gameControllerNotifierProvider.select((value) => value.currentNumber));
+    final notifier = ref.read(gameControllerNotifierProvider.notifier);
     return AnimatedPositioned(
       left: x,
       top: y,
       duration: animationDuration,
-      child: Draggable<T>(
-        data: widget.data,
+      child: Draggable<int>(
+        onDragStarted: () => notifier.dragging = true,
+        data: currentNumber,
         onDragUpdate: (details) {
           setState(() {
             animationDuration = Duration.zero;
@@ -45,14 +71,31 @@ class AnimatedDraggableState<T extends Object> extends State<AnimatedDraggable<T
           });
         },
         onDragEnd: (details) {
-          animationDuration = details.wasAccepted ? Duration.zero : widget.animationDuration;
+          animationDuration = details.wasAccepted
+              ? Duration.zero
+              : const Duration(
+                  milliseconds: 200,
+                );
+          notifier.dragging = false;
           setState(() {
             x = widget.originalOffset.dx;
             y = widget.originalOffset.dy;
           });
         },
-        feedback: widget.builder(widget.data),
-        child: widget.builder(widget.data),
+        onDragCompleted: () => setState(() {
+          // fadeScaleController.reset();
+          // fadeScaleController.forward();
+        }),
+        feedback: CurrentNumber(
+          number: currentNumber,
+          size: 50,
+        ),
+        child: CurrentNumber(
+          number: currentNumber,
+          size: 50,
+        )
+            .animate(controller: flipController)
+            .flip(direction: Random().nextBool() ? Axis.vertical : Axis.horizontal, curve: Curves.easeOut),
       ),
     );
   }
