@@ -19,8 +19,8 @@ class AnimatedDraggable extends StatefulHookConsumerWidget {
 }
 
 class AnimatedDraggableState extends ConsumerState<AnimatedDraggable> with TickerProviderStateMixin {
-  double x = 0;
-  double y = 0;
+  late double x;
+  late double y;
   Duration animationDuration = Duration.zero;
 
   @override
@@ -83,13 +83,18 @@ class AnimatedDraggableState extends ConsumerState<AnimatedDraggable> with Ticke
           });
         },
         onDragCompleted: () => setState(() {
-          // fadeScaleController.reset();
-          // fadeScaleController.forward();
+          fadeScaleController.reset();
+          fadeScaleController.forward();
         }),
         feedback: CurrentNumber(
           number: currentNumber,
           size: 50,
-        ),
+        )
+            .animate(
+              controller: fadeScaleController,
+              autoPlay: false,
+            )
+            .scaleXY(begin: 1, end: 0),
         child: CurrentNumber(
           number: currentNumber,
           size: 50,

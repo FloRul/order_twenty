@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:order_twenty/providers/game_controller.dart';
 import 'package:order_twenty/widgets/animated_draggable.dart';
 import 'package:order_twenty/widgets/bottom_bar.dart';
-import 'package:order_twenty/widgets/current_number.dart';
 import 'package:order_twenty/widgets/dialogs/game_over_dialog.dart';
 import 'package:order_twenty/widgets/slot_grid.dart';
 
