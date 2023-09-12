@@ -35,7 +35,6 @@ class GameView extends ConsumerWidget {
     return LayoutBuilder(builder: (_, cst) {
       const double size = 50;
       return Stack(
-        fit: StackFit.expand,
         children: [
           const Align(
             alignment: Alignment.topCenter,

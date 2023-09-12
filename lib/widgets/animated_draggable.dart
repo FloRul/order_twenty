@@ -25,9 +25,9 @@ class AnimatedDraggableState extends ConsumerState<AnimatedDraggable> with Ticke
 
   @override
   void initState() {
+    super.initState();
     x = widget.originalOffset.dx;
     y = widget.originalOffset.dy;
-    super.initState();
   }
 
   @override
@@ -68,6 +68,7 @@ class AnimatedDraggableState extends ConsumerState<AnimatedDraggable> with Ticke
             animationDuration = Duration.zero;
             x += details.delta.dx;
             y += details.delta.dy;
+            print('xy : $x : $y \n local : ${details.localPosition} \n global : ${details.globalPosition}');
           });
         },
         onDragEnd: (details) {
@@ -98,9 +99,10 @@ class AnimatedDraggableState extends ConsumerState<AnimatedDraggable> with Ticke
         child: CurrentNumber(
           number: currentNumber,
           size: 50,
-        )
-            .animate(controller: flipController)
-            .flip(direction: Random().nextBool() ? Axis.vertical : Axis.horizontal, curve: Curves.easeOut),
+        ).animate(controller: flipController).flip(
+              direction: Random().nextBool() ? Axis.vertical : Axis.horizontal,
+              curve: Curves.easeOut,
+            ),
       ),
     );
   }
