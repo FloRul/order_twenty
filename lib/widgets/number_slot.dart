@@ -77,7 +77,6 @@ class _SlotNumberState extends ConsumerState<SlotNumber> {
       },
       onWillAccept: (data) => notifier.availableSlots.contains(widget.index),
       onMove: (_) {
-        print('move on ${widget.index} : global offset : ${_.offset}');
         setState(() {
           _onHovered = true;
         });

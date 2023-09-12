@@ -38,7 +38,7 @@ class AnimatedDraggableState extends ConsumerState<AnimatedDraggable> with Ticke
     runFadeScaleDown.addListener(
       () {
         if (runFadeScaleDown.value) {
-          fadeScaleController.repeat();
+          fadeScaleController.reset();
         } else {
           fadeScaleController.stop();
         }
@@ -68,7 +68,6 @@ class AnimatedDraggableState extends ConsumerState<AnimatedDraggable> with Ticke
             animationDuration = Duration.zero;
             x += details.delta.dx;
             y += details.delta.dy;
-            print('xy : $x : $y \n local : ${details.localPosition} \n global : ${details.globalPosition}');
           });
         },
         onDragEnd: (details) {
@@ -90,19 +89,23 @@ class AnimatedDraggableState extends ConsumerState<AnimatedDraggable> with Ticke
         feedback: CurrentNumber(
           number: currentNumber,
           size: 50,
-        )
-            .animate(
-              controller: fadeScaleController,
-              autoPlay: false,
-            )
-            .scaleXY(begin: 1, end: 0),
+        ).animate(
+          controller: fadeScaleController,
+          autoPlay: false,
+        ),
+        childWhenDragging: ref.watch(gameControllerNotifierProvider.select((value) => value.dragging))
+            ? const SizedBox.shrink()
+            : CurrentNumber(
+                number: currentNumber,
+                size: 50,
+              ).animate(controller: flipController).flip(
+                  direction: Random().nextBool() ? Axis.vertical : Axis.horizontal,
+                  curve: Curves.easeOut,
+                ), // .scaleXY(begin: 1, end: 0),
         child: CurrentNumber(
           number: currentNumber,
           size: 50,
-        ).animate(controller: flipController).flip(
-              direction: Random().nextBool() ? Axis.vertical : Axis.horizontal,
-              curve: Curves.easeOut,
-            ),
+        ),
       ),
     );
   }
