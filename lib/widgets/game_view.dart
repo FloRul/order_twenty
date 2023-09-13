@@ -23,7 +23,7 @@ class GameView extends ConsumerWidget {
             barrierDismissible: false,
             context: context,
             builder: (context) => GameOverDialog(
-              onPressed: () {
+              onResetPressed: () {
                 notifier.reset();
                 Navigator.of(context).pop();
               },
