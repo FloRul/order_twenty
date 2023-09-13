@@ -1,5 +1,8 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:order_twenty/providers/game_controller.dart';
 import 'package:order_twenty/providers/theme_controller.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -40,14 +43,14 @@ enum SlotState {
   accepted,
 }
 
-class SlotNumber extends ConsumerStatefulWidget {
+class SlotNumber extends StatefulHookConsumerWidget {
   const SlotNumber({super.key, required this.index});
   final int index;
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _SlotNumberState();
 }
 
-class _SlotNumberState extends ConsumerState<SlotNumber> {
+class _SlotNumberState extends ConsumerState<SlotNumber> with SingleTickerProviderStateMixin {
   late bool _onHovered;
 
   @override
@@ -64,13 +67,15 @@ class _SlotNumberState extends ConsumerState<SlotNumber> {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = ref.watch(themeControllerProvider.notifier).colorScheme;
+    final controller = useAnimationController(vsync: this, duration: 1.seconds);
+    final scheme = Theme.of(context).colorScheme;
     var notifier = ref.read(gameControllerNotifierProvider.notifier);
     var gameState = ref.watch(gameControllerNotifierProvider);
     var slotState = ref.watch(slotStateProvider(widget.index));
     return DragTarget<int>(
       onAccept: (data) {
         notifier.putNumber(widget.index);
+        controller.reset();
         setState(() {
           _onHovered = false;
         });
@@ -85,11 +90,15 @@ class _SlotNumberState extends ConsumerState<SlotNumber> {
         _onHovered = false;
       }),
       builder: (context, candidateData, rejectedData) {
+        if (candidateData.isNotEmpty) {
+          controller.repeat(period: 1.seconds);
+        } else {
+          controller.stop();
+        }
         return AnimatedContainer(
           width: 50,
           height: 50,
           decoration: BoxDecoration(
-              border: Border.all(color: Theme.of(context).colorScheme.onBackground),
               borderRadius: BorderRadius.circular(10),
               color: switch (slotState) {
                 SlotState.idle => scheme.surfaceVariant,
@@ -115,7 +124,12 @@ class _SlotNumberState extends ConsumerState<SlotNumber> {
               )
             ],
           ),
-        );
+        )
+            .animate(
+              controller: controller,
+              autoPlay: false,
+            )
+            .shimmer(color: scheme.secondaryContainer);
       },
     );
   }

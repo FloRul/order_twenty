@@ -71,6 +71,12 @@ class AnimatedDraggableState extends ConsumerState<AnimatedDraggable> with Ticke
           });
         },
         onDragEnd: (details) {
+          if (details.wasAccepted) {
+            setState(() {
+              fadeScaleController.reset();
+              fadeScaleController.forward();
+            });
+          }
           animationDuration = details.wasAccepted
               ? Duration.zero
               : const Duration(
@@ -82,10 +88,6 @@ class AnimatedDraggableState extends ConsumerState<AnimatedDraggable> with Ticke
             y = widget.originalOffset.dy;
           });
         },
-        onDragCompleted: () => setState(() {
-          fadeScaleController.reset();
-          fadeScaleController.forward();
-        }),
         feedback: CurrentNumber(
           number: currentNumber,
           size: 50,
@@ -98,14 +100,14 @@ class AnimatedDraggableState extends ConsumerState<AnimatedDraggable> with Ticke
             : CurrentNumber(
                 number: currentNumber,
                 size: 50,
-              ).animate(controller: flipController).flip(
-                  direction: Random().nextBool() ? Axis.vertical : Axis.horizontal,
-                  curve: Curves.easeOut,
-                ), // .scaleXY(begin: 1, end: 0),
+              ),
         child: CurrentNumber(
           number: currentNumber,
           size: 50,
-        ),
+        ).animate(controller: flipController).flip(
+              direction: Random().nextBool() ? Axis.vertical : Axis.horizontal,
+              curve: Curves.easeOut,
+            ),
       ),
     );
   }

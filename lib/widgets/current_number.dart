@@ -1,6 +1,5 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:order_twenty/providers/theme_controller.dart';
 
 class CurrentNumber extends ConsumerWidget {
   const CurrentNumber({
@@ -12,7 +11,7 @@ class CurrentNumber extends ConsumerWidget {
   final double size;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final scheme = ref.watch(themeControllerProvider.notifier).colorScheme;
+    final scheme = Theme.of(context).colorScheme;
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: Material(
@@ -22,7 +21,7 @@ class CurrentNumber extends ConsumerWidget {
           decoration: BoxDecoration(
               color: scheme.background,
               border: Border.all(
-                color: scheme.primary,
+                color: scheme.primary.withOpacity(.5),
                 width: 5,
               ),
               borderRadius: BorderRadius.circular(10)),
