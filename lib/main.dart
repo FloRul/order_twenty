@@ -3,8 +3,9 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:order_twenty/misc/ad_helper.dart';
-import 'package:order_twenty/providers/theme_controller.dart';
 import 'package:order_twenty/widgets/game_view.dart';
+import 'package:flex_color_scheme/flex_color_scheme.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,12 +18,15 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var theme = ref.watch(themeControllerProvider);
     return SafeArea(
       child: MaterialApp(
         title: 'Order twenty',
-        theme: theme.$1,
-        darkTheme: theme.$2,
+        theme: FlexThemeData.light(
+          scheme: FlexScheme.deepOrangeM3,
+        ).copyWith(textTheme: GoogleFonts.playTextTheme()),
+        darkTheme: FlexThemeData.dark(scheme: FlexScheme.deepOrangeM3).copyWith(
+          textTheme: GoogleFonts.playTextTheme(),
+        ),
         themeMode: ThemeMode.dark,
         home: const MainPage(),
       ),

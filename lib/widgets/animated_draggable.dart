@@ -95,19 +95,19 @@ class AnimatedDraggableState extends ConsumerState<AnimatedDraggable> with Ticke
           controller: fadeScaleController,
           autoPlay: false,
         ),
-        childWhenDragging: ref.watch(gameControllerNotifierProvider.select((value) => value.dragging))
+        child: ref.watch(
+          gameControllerNotifierProvider.select(
+            (value) => value.dragging,
+          ),
+        )
             ? const SizedBox.shrink()
             : CurrentNumber(
                 number: currentNumber,
                 size: 50,
-              ),
-        child: CurrentNumber(
-          number: currentNumber,
-          size: 50,
-        ).animate(controller: flipController).flip(
-              direction: Random().nextBool() ? Axis.vertical : Axis.horizontal,
-              curve: Curves.easeOut,
-            ),
+              ).animate(controller: flipController).flip(
+                  direction: Random().nextBool() ? Axis.vertical : Axis.horizontal,
+                  curve: Curves.easeOut,
+                ),
       ),
     );
   }
