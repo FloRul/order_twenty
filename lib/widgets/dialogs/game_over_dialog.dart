@@ -51,6 +51,7 @@ class _GameOverDialogState extends ConsumerState<GameOverDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final textColor = Theme.of(context).colorScheme.onBackground;
     return AlertDialog.adaptive(
       actionsAlignment: MainAxisAlignment.center,
       content: Column(
@@ -61,20 +62,24 @@ class _GameOverDialogState extends ConsumerState<GameOverDialog> {
             children: [
               Text(
                 'Game'.toUpperCase(),
-                style: const TextStyle(fontSize: 25),
+                style: TextStyle(fontSize: 25, color: textColor),
               ),
               Text(
                 ' over'.toUpperCase(),
-                style: const TextStyle(fontSize: 25),
+                style: TextStyle(fontSize: 25, color: textColor),
               ),
             ].animate(interval: 400.milliseconds).slideY(begin: -1, end: 0).fadeIn(),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('Score  '.toUpperCase()),
+              Text(
+                'Score  '.toUpperCase(),
+                style: TextStyle(color: textColor),
+              ),
               Text(
                 (ref.watch(gameControllerNotifierProvider).alreadyPickedNumbers.length - 1).toString(),
+                style: TextStyle(color: textColor),
               ),
             ].animate(interval: 400.milliseconds).slideY(begin: 1, end: 0, delay: 800.milliseconds).fadeIn(),
           )
@@ -99,7 +104,10 @@ class _GameOverDialogState extends ConsumerState<GameOverDialog> {
         //   },
         // ),
         IconButton.filledTonal(
-          icon: const Icon(Icons.refresh),
+          icon: const Icon(
+            Icons.refresh,
+            size: 32,
+          ),
           onPressed: widget.onResetPressed,
         )
             .animate()
@@ -107,7 +115,7 @@ class _GameOverDialogState extends ConsumerState<GameOverDialog> {
             .animate(
               onPlay: (controller) => controller.repeat(),
             )
-            .shake(duration: 1.seconds, curve: Curves.bounceInOut, rotation: 90),
+            .rotate(duration: 10.seconds, begin: -1, end: 1),
       ],
     );
   }

@@ -35,12 +35,16 @@ class GameView extends ConsumerWidget {
     return LayoutBuilder(builder: (_, cst) {
       const double size = 50;
       return Stack(
+        alignment: Alignment.center,
         children: [
-          const Align(
-            alignment: Alignment.topCenter,
+          Positioned(
+            top: 48,
             child: Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text('Number to order:'),
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                'Number to order'.toUpperCase(),
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
             ),
           ),
           Center(

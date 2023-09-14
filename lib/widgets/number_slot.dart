@@ -90,7 +90,7 @@ class _SlotNumberState extends ConsumerState<SlotNumber> with SingleTickerProvid
       }),
       builder: (context, candidateData, rejectedData) {
         if (candidateData.isNotEmpty) {
-          controller.repeat(period: 1.seconds);
+          controller.repeat(period: 500.milliseconds, reverse: true);
         } else {
           controller.stop();
         }
@@ -120,10 +120,11 @@ class _SlotNumberState extends ConsumerState<SlotNumber> with SingleTickerProvid
               Visibility(
                 visible: gameState.slots[widget.index] != null,
                 child: Center(
-                    child: Text(
-                  gameState.slots[widget.index]?.toString() ?? '',
-                  style: TextStyle(fontWeight: FontWeight.bold, color: scheme.onBackground),
-                )),
+                  child: Text(
+                    gameState.slots[widget.index]?.toString() ?? '',
+                    style: TextStyle(fontWeight: FontWeight.bold, color: scheme.onBackground),
+                  ),
+                ),
               )
             ],
           ),
@@ -132,7 +133,7 @@ class _SlotNumberState extends ConsumerState<SlotNumber> with SingleTickerProvid
               controller: controller,
               autoPlay: false,
             )
-            .shimmer(color: scheme.secondaryContainer);
+            .scaleXY(begin: 1, end: 1.2);
       },
     );
   }
