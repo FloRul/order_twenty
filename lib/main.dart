@@ -81,7 +81,7 @@ class _MainPageState extends ConsumerState<MainPage> {
           )
           .custom(
             curve: Curves.linear,
-            duration: 10.seconds,
+            duration: 25.seconds,
             builder: (context, value, child) => Container(
               decoration: BoxDecoration(
                 boxShadow: [
@@ -94,8 +94,8 @@ class _MainPageState extends ConsumerState<MainPage> {
                 ],
                 gradient: LinearGradient(
                   colors: [
-                    Color.lerp(scheme.primary, scheme.onPrimary, value)!,
-                    Color.lerp(scheme.secondary, scheme.onSecondary, value)!,
+                    scheme.primary,
+                    scheme.secondary,
                   ],
                   begin: Alignment(-1, value * 2 - 1),
                   end: Alignment(1, -value * 2 + 1),

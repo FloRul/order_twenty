@@ -1,10 +1,8 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:order_twenty/providers/game_controller.dart';
-import 'package:order_twenty/providers/theme_controller.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'number_slot.g.dart';
 
@@ -88,6 +86,7 @@ class _SlotNumberState extends ConsumerState<SlotNumber> with SingleTickerProvid
       },
       onLeave: (_) => setState(() {
         _onHovered = false;
+        controller.reset();
       }),
       builder: (context, candidateData, rejectedData) {
         if (candidateData.isNotEmpty) {
@@ -114,13 +113,17 @@ class _SlotNumberState extends ConsumerState<SlotNumber> with SingleTickerProvid
                   padding: const EdgeInsets.all(4.0),
                   child: Text(
                     (widget.index + 1).toString(),
-                    style: const TextStyle(fontSize: 10),
+                    style: TextStyle(fontSize: 10, color: scheme.onBackground),
                   ),
                 ),
               ),
               Visibility(
                 visible: gameState.slots[widget.index] != null,
-                child: Center(child: Text(gameState.slots[widget.index]?.toString() ?? '')),
+                child: Center(
+                    child: Text(
+                  gameState.slots[widget.index]?.toString() ?? '',
+                  style: TextStyle(fontWeight: FontWeight.bold, color: scheme.onBackground),
+                )),
               )
             ],
           ),
